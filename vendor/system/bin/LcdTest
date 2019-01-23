@@ -1,0 +1,47 @@
+#!/system/bin/sh
+#########################################################################
+#	LcdTest																			 											#
+#	adb push LcdTest /data/data																				#
+
+#########################################################################
+
+# TEST_TIMES=-1
+# INDEX=0
+# COUNT=10
+# REC=1
+
+case $1 in
+	"0")
+		
+		
+			# echo "Preparing to open camera(Back camera)...!"
+			# setprop sys.camera.start 0
+
+			#sh /system/bin/am start -S -n com.android.gallery3d/com.android.camera.Camera -e commandID $1
+			# sh /system/bin/am force-stop com.hq.cameratest
+			sh /system/bin/am force-stop com.hq.lcdtest
+			sh /system/bin/am start -S -n com.hq.lcdtest/com.hq.lcdtest.TestLcd
+			#echo "LCD Status:0(ON)"
+			echo "1"
+		;;
+	"1")
+		#echo "LED Status:1(Red Light)"
+		#echo 255 > sys/class/leds/lcd-backlight/brightness
+		#echo 127 > sys/class/leds/lcd-backlight/brightness
+		#echo 0 > sys/class/leds/lcd-backlight/brightness
+		sh /system/bin/am broadcast -a com.android.test
+		echo "1"
+	;;
+
+	
+	"2")
+		#echo "Lcd Status:1(off)"
+		sh /system/bin/input keyevent 4
+		echo "1"
+	;;
+	*)
+		echo "Invalid argument!!(par1 : commandID = $1)"
+	;;
+esac
+
+exit 0

@@ -1,0 +1,299 @@
+#!/system/bin/sh
+#########################################################################
+#	PhoneInfoTest 																	 											#
+#	adb push PhoneInfoTest /data/data																			#
+#	                          																						#
+#########################################################################
+
+#IMEI_TOOL="/system/bin/get_IMEI"
+XSN_TOOL="/system/bin/wprod"
+MAC_ADDR_TOOL="/system/bin/wprod"
+
+INDEX=0
+COUNT=5
+REC=1
+
+function print_usage(){
+    echo "Usage:"$0""
+    echo "[0=SSN] [0=Read|1=Write[String]]"
+    echo "[1=IMEI] [0=Read|1=Write[String]]"
+    echo "[2=BT Mac] [0=Read|1=Write[String]]"
+    echo "[3=WIFI Mac] [0=Read|1=Write[String]]"
+    echo "[4=ISN] [0=Read|1=Write[String]]"
+    echo "[6=Country] [0=Read|1=Write[String]]"
+    echo "[7=Color ID] [0=Read|1=Write[String]]"
+    echo "[8=Customer ID] [0=Read|1=Write[String]]"
+}
+
+case $1 in
+    "0") #SSN
+        case $2 in
+            "1") # Write
+            		#songjiangchao, 2015-05-08, add for write to modem nvram  and AP nvram start
+            		# the info (like "Starting service: Intent { cmp=com.huaqin.imeiwriterservice/.ImeiWriterService (has extras) }" etc.) 
+            		#must NOT appear on console according to ASUS , which is controlled in frameworks/base/cmds/am/Am.java
+            		setprop sys.ixmx.hideconsoleinfo 1
+            		sh /system/bin/am startservice -n com.huaqin.imeiwriterservice/.ImeiWriterService --es action_type WritingSSN --es my_num $3
+            		sleep 1
+             		$XSN_TOOL ssn w $3
+            		while [ $INDEX -lt $COUNT ]
+            		do
+            			INDEX=$(($INDEX+1))
+            			result=`getprop sys.ixmx.modify`
+#            			echo "sys.ixmx.modify--->" 
+#            			echo $result
+            			if [ $result == $REC ]; then
+					setprop sys.ixmx.hideconsoleinfo 0
+					$XSN_TOOL backupToBinRegion  # to backup AP NvRAM and Modem NvRAM
+					sleep 1
+					echo "0" # success result must be shown after backingup
+					exit 0
+            			fi
+            			sleep 1
+            		done	
+            		echo "1"
+            		exit 1
+            		#songjiangchao, 2015-05-08, add for write to modem nvram and AP nvram end            
+#            		$XSN_TOOL ssn w $3   # songjiangchao, 2015-05-08,  move to above
+            ;;
+            "0") # Read
+            		$XSN_TOOL ssn r
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    "1") #IMEI
+        case $2 in
+            "0") # Read
+                #setprop sys.imei.start 0
+
+                #sh /system/bin/am start -S -n com.huaqin.imei/com.huaqin.imei.GetIMEIActivity
+                while [ $INDEX -lt $COUNT ]
+                do
+            		INDEX=$(($INDEX+1))
+            		result=`getprop sys.imei.start`
+            		if [ $result == $REC ]; then
+				echo `getprop sys.imei1.value`
+				echo `getprop sys.imei2.value`
+				exit 0
+            		fi
+            		sleep 1
+                done
+                echo "1"
+                #IMEI=`$IMEI_TOOL`
+                #echo $IMEI
+                #echo "358463051106605"
+            ;;
+            "1") # Write<IMEI1>
+            #songjiangchao , 2015-04-30 ,add start
+            # the info (like "Starting service: Intent { cmp=com.huaqin.imeiwriterservice/.ImeiWriterService (has extras) }" etc.) 
+            #must NOT appear on console according to ASUS , which is controlled in frameworks/base/cmds/am/Am.java
+                setprop sys.ixmx.hideconsoleinfo 1
+                sh /system/bin/am startservice -n com.huaqin.imeiwriterservice/.ImeiWriterService --es action_type WritingIMEI1 --es my_num $3
+                while [ $INDEX -lt $COUNT ]
+                do
+            		INDEX=$(($INDEX+1))
+            		result=`getprop sys.ixmx.modify`
+#            		echo "sys.ixmx.modify--->" 
+#            		echo $result
+            		if [ $result == $REC ]; then
+				setprop sys.ixmx.hideconsoleinfo 0
+				$XSN_TOOL backupToBinRegion
+				sleep 1
+				echo "0"
+				exit 0
+            		fi
+            		sleep 1
+                done
+            #songjiangchao , 2015-04-30 ,add  end
+		echo "1"
+                exit 1
+            ;;
+            "2") # Write<IMEI2>
+            #songjiangchao , 2015-04-30 ,add start
+            # the info (like "Starting service: Intent { cmp=com.huaqin.imeiwriterservice/.ImeiWriterService (has extras) }" etc.) 
+            #must NOT appear on console according to ASUS , which is controlled in frameworks/base/cmds/am/Am.java
+                setprop sys.ixmx.hideconsoleinfo 1
+                sh /system/bin/am startservice -n com.huaqin.imeiwriterservice/.ImeiWriterService --es action_type WritingIMEI2 --es my_num $3
+                while [ $INDEX -lt $COUNT ]
+                do
+            		INDEX=$(($INDEX+1))
+            		result=`getprop sys.ixmx.modify`
+#            		echo "sys.ixmx.modify--->"
+#            		echo $result
+            		if [ $result == $REC ]; then
+				echo "0"
+				setprop sys.ixmx.hideconsoleinfo 0
+				$XSN_TOOL backupToBinRegion
+				exit 0
+            		fi
+            		sleep 1
+                done
+            #songjiangchao , 2015-04-30 ,add  end
+		echo "1"
+                exit 1
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    "2") #BT MAC
+        case $2 in
+            "0") # Read
+            		$MAC_ADDR_TOOL bt r
+            ;;
+            "1") # Write
+            		$MAC_ADDR_TOOL bt w $3
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    "3") #WIFI MAC
+        case $2 in
+            "0") # Read
+            		$MAC_ADDR_TOOL wifi r
+            ;;
+            "1") # Write
+            		$MAC_ADDR_TOOL wifi w $3
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    "4") #ISN
+        case $2 in
+            "1") # Write
+            		#songjiangchao, 2015-05-08, add for write to modem nvram  and AP nvram start
+            		# the info (like "Starting service: Intent { cmp=com.huaqin.imeiwriterservice/.ImeiWriterService (has extras) }" etc.) 
+            		#must NOT appear on console according to ASUS , which is controlled in frameworks/base/cmds/am/Am.java
+            		setprop sys.ixmx.hideconsoleinfo 1
+            		sh /system/bin/am startservice -n com.huaqin.imeiwriterservice/.ImeiWriterService --es action_type WritingISN --es my_num $3
+            		sleep 1
+             		$XSN_TOOL isn w $3
+            		while [ $INDEX -lt $COUNT ]
+            		do
+            			INDEX=$(($INDEX+1))
+            			result=`getprop sys.ixmx.modify`
+#            			echo "sys.ixmx.modify 2222 --->" 
+#            			echo $result
+            			if [ $result == $REC ]; then
+					setprop sys.ixmx.hideconsoleinfo 0
+					$XSN_TOOL backupToBinRegion  # to backup AP NvRAM and Modem NvRAM
+					sleep 1
+					echo "0" # success result must be shown after backingup
+					exit 0
+            			fi
+            			sleep 1
+            		done	
+            		echo "1"
+            		exit 1
+            		#songjiangchao, 2015-05-08, add for write to modem nvram and AP nvram end            
+#            		$XSN_TOOL isn w $3   # songjiangchao, 2015-05-08,  move to above
+            ;;
+            "0") # Read
+            		$XSN_TOOL isn r
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    "6") #Country code
+        case $2 in
+            "0") # Read
+            		$MAC_ADDR_TOOL cn r
+            ;;
+            "1") # Write
+            		$MAC_ADDR_TOOL cn w $3
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    "7") #Color ID
+        case $2 in
+            "0") # Read
+            		$MAC_ADDR_TOOL cc r
+            ;;
+            "1") # Write
+            		$MAC_ADDR_TOOL cc w $3
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    "8") #Customer ID
+        case $2 in
+            "0") # Read
+                # echo "1"
+		result=`getprop persist.custom.customer_id`
+                echo $result
+            ;;
+            "1") # Write
+                 # echo "1"
+		setprop persist.custom.customer_id $3
+               echo "0"
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    "9") #Customer ID
+        case $2 in
+            "0") # IMSI
+                while [ $INDEX -lt $COUNT ]
+                do
+            		INDEX=$(($INDEX+1))
+            		result=`getprop sys.imsi.start`
+            		if [ $result == $REC ]; then
+				echo `getprop sys.imsi1.value`
+				echo `getprop sys.imsi2.value`
+				exit 0
+            		fi
+            		sleep 1
+                done
+                echo "0"
+            ;;
+            "1") # Write
+                while [ $INDEX -lt $COUNT ]
+                do
+            		INDEX=$(($INDEX+1))
+            		result=`getprop sys.sdcard.start`
+            		if [ $result == $REC ]; then
+				echo `getprop sys.sdcard.value`
+				exit 0
+            		fi
+            		sleep 1
+                done
+                echo "0"
+            ;;
+            *)
+                print_usage
+                exit 1
+            ;;
+        esac
+    ;;
+    *)
+        print_usage
+        exit 1
+    ;;
+esac
+
+exit 0

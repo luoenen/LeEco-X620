@@ -1,0 +1,226 @@
+#!/system/bin/sh
+#########################################################################
+#	CameraTest																			 											#
+#	adb push CameraTest /data/data																				#
+#	adb pull sdcard/DCIM/Camera																						#
+#########################################################################
+
+TEST_TIMES=-1
+INDEX=0
+COUNT=10
+REC=1
+
+case $1 in
+	"0")
+		case $2 in
+		"0")
+			# echo "Preparing to close camera(Back camera)...!"
+			setprop sys.camera.close 0
+
+			sh /system/bin/input keyevent 4
+			while [ $INDEX -lt $3 ]
+			do
+				INDEX=$(($INDEX+1))
+				result=`getprop sys.camera.close`
+				if [ $result == $REC ]; then
+					# echo "Close camera success!!"
+					setprop com.hb.disableevent 0
+					# echo "Enable touch success!!"
+					setprop camera.infinity.set 0
+					# echo "Cancel focus setting!!"
+					echo "1"				
+					exit 0
+				fi
+				sleep 1
+			done
+			# echo "Close camera failed!!"
+			echo "0"
+		;;
+		"1")
+			# echo "Preparing to open camera(Back camera)...!"
+			setprop sys.camera.start 0
+
+			#sh /system/bin/am start -S -n com.android.gallery3d/com.android.camera.Camera -e commandID $1
+			sh /system/bin/am force-stop com.hq.cameratest
+			sh /system/bin/am start -S -n com.hq.cameratest/com.hq.cameratest.CameraBackActivity
+			while [ $INDEX -lt $3 ]
+ 			do
+				INDEX=$(($INDEX+1))
+				result=`getprop sys.camera.start`
+				if [ $result == $REC ]; then
+					# echo "Start preview success!!"
+					setprop com.hb.disableevent 1
+					# echo "Disable touch success!!"
+					echo "1"
+					exit 0
+				fi
+				sleep 1
+			done
+			# echo "Start preview failed!!"
+			echo "0"
+		;;
+		*)
+			echo "Invalid argument!!(par2 : onoffID = $2)"
+		;;
+		esac
+	;;
+	
+	"1")
+		case $2 in
+		"0")
+			# echo "Preparing to close camera(Front camera)...!"
+			setprop sys.camera.close 0
+
+			sh /system/bin/input keyevent 4
+			while [ $INDEX -lt $3 ]
+			do
+				INDEX=$(($INDEX+1))
+				result=`getprop sys.camera.close`
+				if [ $result == $REC ]; then
+					# echo "Close camera success!!"
+					setprop com.hb.disableevent 0
+					# echo "Enable touch success!!"
+					echo "1"					
+					exit
+				fi
+				sleep 1
+			done
+			# echo "Close camera failed!!"
+			echo "0"
+		;;
+		"1")
+			# echo "Preparing to open camera(Front camera)...!"
+			setprop sys.camera.start 0
+
+			#sh /system/bin/am start -S -n com.android.gallery3d/com.android.camera.Camera -e commandID $1
+			sh /system/bin/am force-stop com.hq.cameratest
+			sh /system/bin/am start -S -n com.hq.cameratest/com.hq.cameratest.CameraFrontActivity
+			while [ $INDEX -lt $3 ]
+			do
+				INDEX=$(($INDEX+1))
+				result=`getprop sys.camera.start`
+				if [ $result == $REC ]; then
+					# echo "Start preview success!!"
+					setprop com.hb.disableevent 1
+					# echo "Disable touch success!!"
+					echo "1"
+					exit
+				fi
+				sleep 1
+			done
+			# echo "Start preview failed!!"
+			echo "0"
+		;;
+		*)
+			echo "Invalid argument!!(par2 : onoffID = $2)"
+		;;
+		esac
+	;;
+	
+	"2")
+		# echo "Preparing to auto focus & take picture...!"
+		setprop sys.camera.file $2
+		setprop sys.camera.picture 0
+
+		result=`getprop sys.camera.rotation`
+		if [ ! -n "$result" ]; then
+			setprop sys.camera.rotation 9
+			result=`getprop sys.camera.rotation`
+		fi
+		
+		project=`getprop ro.product.model`
+		if [ ! -n "$project" ]; then
+			project=`getprop ro.product.device`
+		fi
+		
+
+		sh /system/bin/input tap 960 540
+		sleep 2
+		sh /system/bin/input keyevent 27
+
+		
+		while [ $INDEX -lt $COUNT ]
+		do
+			INDEX=$(($INDEX+1))
+			result=`getprop sys.camera.picture`
+			if [ $result == $REC ]; then
+				# echo "Picture taken success!!"
+				echo "1"
+				exit
+			fi
+			sleep 1
+		done
+		# echo "Picture taken failed!!"
+		echo "0"
+	;;
+	
+	"3")
+		#echo "Set focus mode!"
+		setprop camera.infinity.set $2
+		sleep 1
+		echo "1"
+	;;	
+	
+	"4")
+		# echo "Take picture...!"
+		setprop sys.camera.file $2
+		setprop sys.camera.picture 0
+		
+		sh /system/bin/input keyevent 27
+		while [ $INDEX -lt $COUNT ]
+		do
+			INDEX=$(($INDEX+1))
+			result=`getprop sys.camera.picture`
+			if [ $result == $REC ]; then
+				# echo "Picture taken success!!"
+				echo "1"
+				exit
+			fi
+			sleep 1
+		done
+		# echo "Picture taken failed!!"
+		echo "0"
+	;;
+
+	"5")
+		#echo "Take raw picture!"
+		sleep 1
+		echo "0"
+	;;	
+
+	"6")
+		#echo "Calibration!"
+		case $2 in
+		"0")
+			echo "Calibration Back Camera...!"
+			system/bin/dit_cali 0 >/data/data/rear.txt
+		;;
+		"1")
+			echo "Calibration Front Camera...!"
+			system/bin/dit_cali 1 >/data/data/front.txt
+		;;
+		*)
+			echo "Invalid argument!!(par2 : onoffID = $2)"
+		;;
+		esac
+	;;
+
+	"7")
+		#echo "Calibration!"
+		case $2 in
+		"0")
+			echo "Calibration2 Back Camera...!"
+			system/bin/dit_cali 2 >/data/data/rear.txt
+		;;
+		"1")
+			echo "Calibration2 Front Camera...!"
+			system/bin/dit_cali 3 >/data/data/front.txt
+		;;
+		*)
+			echo "Invalid argument!!(par2 : onoffID = $2)"
+		;;
+		esac
+	;;
+esac
+
+exit 0

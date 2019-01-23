@@ -1,0 +1,8 @@
+# begin addon properties
+ro.addon.type=gapps
+ro.addon.arch=arm64
+ro.addon.sdk=25
+ro.addon.platform=7.1
+ro.addon.open_type=pico
+ro.addon.open_version=20170927
+# end addon properties

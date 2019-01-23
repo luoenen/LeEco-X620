@@ -1,0 +1,17 @@
+# songjiangchao,2015-03-24,add start,
+#for change_pmic_mode_on
+service runinbatteryon /system/bin/runinbatteryon
+    user root
+    oneshot
+    disabled
+    on property:sys.runinbatteryon=1
+    start runinbatteryon
+
+# for change_pmic_mode_off
+service runinbatteryoff /system/bin/runinbatteryoff
+    user root
+    oneshot
+    disabled
+    on property:sys.runinbatteryoff=1
+    start runinbatteryoff
+# songjiangchao,2015-03-24,add end

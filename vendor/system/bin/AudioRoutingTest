@@ -1,0 +1,319 @@
+#!/system/bin/sh
+#########################################################################
+#	AudioRoutingTest														 											#
+#	adb push AudioRoutingTest /data/data
+#	chmod 755 /data/data/AudioRoutingTest
+#	adb push audiochannel /system/bin
+#	chmod 755 /system/bin/audiochannel
+#########################################################################
+
+AUDIO_CHANNEL=/system/bin/audiochannel
+#PLAY_FILE=/data/data/play.wav
+RECORD_FILE=/data/data/record.wav
+
+#HQ:Play File Name
+PLAY_AUDIO()
+{
+	file_name=$1
+
+}
+
+#HQ:Play File Name
+RECORD_AUDIO()
+{
+	file_name=$1
+
+}
+
+#HQ:
+#Para1: Routing(0=Speaker,1=Receive,2=Headset)
+#Para2: PlayFileName(If file name is NULL, this function won’t play and only set routing path)
+PLAYBACK()
+{
+	device=$1
+	filename=$2
+
+	if [ "$filename" == "" ]; then # no valid play file name
+		if [ "$device" == "0" ]; then # speaker(Board_Mic -> Speaker)
+        src="1"
+        dst="3"
+		elif [ "$device" == "1" ]; then # receiver(Board_Mic -> Receiver)
+        src="1"
+        dst="1"
+		elif [ "$device" == "2" ]; then # headset(Board_Mic -> Headset)
+        src="1"
+        dst="2"
+		else
+        echo "0"
+        exit 0
+		fi
+		
+		$AUDIO_CHANNEL 0
+		$AUDIO_CHANNEL "$src"  "$dst"
+		echo "1"
+	else
+		if [ "$device" == "0" ]; then # speaker
+        PLAY_AUDIO filename
+        echo "1"
+		elif [ "$device" == "1" ]; then # receiver
+        PLAY_AUDIO filename
+        echo "1"
+		elif [ "$device" == "2" ]; then # headset
+        PLAY_AUDIO filename
+        echo "1"
+		else
+        echo "0"
+		fi
+	fi
+}
+
+#HQ:
+#Para1:
+#	CMD2:Set Audio loopback mode
+#	CMD4:Headset Mic Record and Play
+#	CMD5:Second MIC Record and Play
+#Para2:
+# Routing(0=Speaker,1=Receive,2=Headset)
+#Para3: Recording time
+RECORDBACK()
+{
+	record_dev=$1
+	play_dev=$2
+	record_time=$3
+
+	if [ "$record_time" == "" ]; then # No record time
+		echo "0"
+		exit 0
+	fi
+
+	if [ "$record_dev" == "1" ]; then
+#		a12_dmic_config
+		:;
+	elif [ "$record_dev" == "4" ]; then
+#		headset_mic_config
+		:;
+	elif [ "$record_dev" == "5" ]; then
+#		p72g_amic_config
+		:;
+	else
+		echo "0"
+		exit 0
+	fi
+
+	RECORD_AUDIO filename
+
+	if [ "$record_dev" == "1" ]; then
+#		a12_dmic_close
+		:;
+	elif [ "$record_dev" == "4" ]; then
+#		headset_mic_close
+		:;
+	elif [ "$record_dev" == "5" ]; then
+#		p72g_amic_close
+		:;
+	else
+		echo "0"
+		exit 0
+	fi
+	
+	PLAY_AUDIO filename
+}
+
+#HQ:
+#input:	ap_main_mic = 1; ap_headset_mic = 2; ap_ref_mic = 3; 
+#input:	md_main_mic = 21; md_headset_mic = 22; md_ref_mic = 25;
+#output:	receiver = 1; earphone = 2; speaker = 3;
+LOOPBACK()
+{
+	if [ "$1" == "0" ]; then # stop
+		$AUDIO_CHANNEL 0
+		echo "1"
+		exit 0
+	elif [ "$1" == "1" -a "$2" == "0" ]; then # Board_Mic -> Speaker
+		src="1"
+		dst="3"
+	elif [ "$1" == "1" -a "$2" == "1" ]; then # Board_Mic -> Headset
+		src="1"
+		dst="2"
+	elif [ "$1" == "1" -a "$2" == "2" ]; then # Board_Mic -> Speaker_L
+		src="1"
+		dst="3"
+	elif [ "$1" == "1" -a "$2" == "3" ]; then # Board_Mic -> Speaker_R
+		src="1"
+		dst="3"
+	elif [ "$1" == "1" -a "$2" == "4" ]; then # Board_Mic -> Headset_L
+		src="1"
+		dst="3"
+	elif [ "$1" == "1" -a "$2" == "5" ]; then # Board_Mic -> Headset_R
+		src="1"
+		dst="2"
+	elif [ "$1" == "1" -a "$2" == "6" ]; then # Board_Mic -> Receiver
+		src="1"
+		dst="1"
+	elif [ "$1" == "2" -a "$2" == "0" ]; then # Headset_Mic -> Speaker
+		src="2"
+		dst="3"
+	elif [ "$1" == "2" -a "$2" == "1" ]; then # Headset_Mic -> Headset
+		src="2"
+		dst="2"
+	elif [ "$1" == "2" -a "$2" == "2" ]; then # Headset_Mic -> Speaker_L
+		src="2"
+		dst="3"
+	elif [ "$1" == "2" -a "$2" == "3" ]; then # Headset_Mic -> Speaker_R
+		src="2"
+		dst="3"
+	elif [ "$1" == "2" -a "$2" == "4" ]; then # Headset_Mic -> Headset_L
+		src="2"
+		dst="3"
+	elif [ "$1" == "2" -a "$2" == "5" ]; then # Headset_Mic -> Headset_R
+		src="2"
+		dst="2"
+	elif [ "$1" == "2" -a "$2" == "6" ]; then # Headset_Mic -> Receiver
+		src="2"
+		dst="1"
+	elif [ "$1" == "3" -a "$2" == "0" ]; then # Board_Mic_2 -> Speaker
+		src="3"
+		dst="3"
+	elif [ "$1" == "3" -a "$2" == "1" ]; then # Board_Mic_2 -> Headset
+		src="3"
+		dst="2"
+	elif [ "$1" == "3" -a "$2" == "2" ]; then # Board_Mic_2 -> Speaker_L
+		src="3"
+		dst="3"
+	elif [ "$1" == "3" -a "$2" == "3" ]; then # Board_Mic_2 -> Speaker_R
+		src="3"
+		dst="3"
+	elif [ "$1" == "3" -a "$2" == "4" ]; then # Board_Mic_2 -> Headset_L
+		src="3"
+		dst="3"
+	elif [ "$1" == "3" -a "$2" == "5" ]; then # Board_Mic_2 -> Headset_R
+		src="3"
+		dst="2"
+	elif [ "$1" == "3" -a "$2" == "6" ]; then # Board_Mic_2 -> Receiver
+		src="3"
+		dst="1"
+	else
+		echo "0"
+		exit 0
+	fi
+
+	$AUDIO_CHANNEL 0
+	$AUDIO_CHANNEL "$src"  "$dst"
+	echo "1"
+}
+
+#HQ:
+#input:	md_main_mic = 21; md_headset_mic = 22; md_ref_mic = 25;
+#output: receiver = 1; earphone = 2; speaker = 3;
+MODEMLOOPBACK()
+{
+	if [ "$1" == "0" ]; then # stop
+		$AUDIO_CHANNEL 0
+		echo "1"
+		exit 0
+	elif [ "$1" == "1" ]; then # board mic -> modem -> Speaker
+		src="21"
+		dst="3"
+	elif [ "$1" == "2" ]; then # Headset mic -> modem -> Headset Speaker
+		src="22"
+		dst="2"
+	elif [ "$1" == "3" ]; then # board mic -> modem -> Receiver
+		src="21"
+		dst="1"
+	elif [ "$1" == "4" ]; then # board mic -> modem -> Headset Speaker
+		src="21"
+		dst="2"
+	elif [ "$1" == "5" ]; then # Headset mic -> modem -> receiver 
+		src="22"
+		dst="1"
+	elif [ "$1" == "6" ]; then # Headset mic -> modem -> Speaker
+		src="22"
+		dst="3"
+	elif [ "$1" == "7" ]; then # Board_Mic_2 -> modem -> receiver
+		src="25"
+		dst="1"
+	elif [ "$1" == "8" ]; then # Board_Mic_2 -> modem -> Headset Speaker
+		src="25"
+		dst="2"
+	elif [ "$1" == "9" ]; then # Board_Mic_2 -> modem -> Speaker
+		src="25"
+		dst="3"	
+	else
+		echo "0"
+		exit 0
+	fi
+
+	$AUDIO_CHANNEL 0
+	$AUDIO_CHANNEL "$src"  "$dst"
+	echo "1"
+}
+
+#HQ:
+#No support
+NOSUPPORT()
+{
+	echo "0"
+}
+
+case $1 in
+    "0")
+        #Set Audio Route and Play
+        PLAYBACK $2 $3
+    ;;
+    "1")
+        #Record and Play
+        RECORDBACK $1 $2 $3
+    ;;
+    "2")
+        #Set Audio loopback mode
+        LOOPBACK $2 $3
+    ;;
+    "3")
+        #Set Docking Speaker test
+        NOSUPPORT
+    ;;
+    "4")
+        #Headset Mic Record and Play
+        RECORDBACK $1 $2 $3
+    ;;
+    "5")
+        #Second MIC Record and Play
+        RECORDBACK $1 $2 $3
+    ;;
+    "6")
+        #Do audio dock /desktop stand single speaker test
+        NOSUPPORT
+    ;;
+    "7")
+        #Force to stop wav file
+        NOSUPPORT
+    ;;
+    "8")
+        #Third MIC Record and Play
+        NOSUPPORT
+    ;;
+    "9")
+        #Turn on/off UART for headset test
+        NOSUPPORT
+    ;;
+    "10")
+        #Modem-codec Loopback test (downlink/uplink)
+        MODEMLOOPBACK $2
+    ;;
+    "11")
+        #Modem-codec  modem generate 1K test (downlink)
+        NOSUPPORT
+    ;;
+    "12")
+        #Modem-codec  playback mode test (downlink/uplink)
+        NOSUPPORT
+    ;;
+    *)
+        echo "Usage"
+        echo "Playback Device PlayFileName"
+        echo "Record(DMIC1)=1 [speaker|receiver|headset] RecordingTime(s)"
+        echo "Loopback=2 [stop loopback=0|dmic1=1|headset_mic=2|dmic2] [speaker=0|headset=1|speaker_l=2|speaker_r=3|headset_l=4||headset_r=5]"
+        echo "Record(Headset_MIC)=4 [speaker=0|headset=2] RecordingTime(s)"
+        exit 1
+    ;;	
+esac

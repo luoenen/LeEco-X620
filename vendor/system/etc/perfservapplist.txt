@@ -1,0 +1,94 @@
+CMD_SET_CPU_CORE_MIN com.imangi.templerun2 3
+CMD_SET_VCORE com.antutu.ABenchMark 3
+CMD_SET_VCORE com.antutu.benchmark 3
+CMD_SET_CLUSTER_CPU_CORE_MIN com.antutu.ABenchMark 2 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.antutu.benchmark 2 2
+CMD_SET_SCHED_HTASK_THRESH com.antutu.ABenchMark 650
+CMD_SET_SCHED_AVG_HTASK_AC com.antutu.ABenchMark 39
+CMD_SET_SCHED_AVG_HTASK_THRESH com.antutu.ABenchMark 500
+CMD_SET_ROOT_CLUSTER com.sina.weibo 0
+CMD_SET_ROOT_CLUSTER com.tencent.mm 0
+CMD_SET_ROOT_CLUSTER com.duokan.reader 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.android.browser 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.android.chrome 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.android.letv.browser 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.UCMobile.intl 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.UCMobile 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.uc.browser.en 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.mtt.intl 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.mtt 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.baidu.browser.apps 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.android.browser 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.android.letv.browser 2 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.duokan.reader 2 0
+CMD_SET_VCORE com.tencent.tmgp.sgame 2
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.sgame 2 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.tmgp.sgame 2 2
+CMD_SET_CLUSTER_CPU_FREQ_MAX com.tencent.tmgp.sgame 2 1495000
+CMD_SET_CLUSTER_CPU_FREQ_MIN com.tencent.tmgp.sgame 2 1495000
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.sgame 1 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.sgame 0 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.tmgp.sgame 0 2
+CMD_SET_CPU_FREQ_MAX com.tencent.tmgp.sgame 481000
+CMD_SET_CPU_FREQ_MIN com.tencent.tmgp.sgame 481000
+CMD_SET_VCORE com.tencent.tmgp.sgamece 2
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.sgamece 2 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.tmgp.sgamece 2 2
+CMD_SET_CLUSTER_CPU_FREQ_MAX com.tencent.tmgp.sgamece 2 1495000
+CMD_SET_CLUSTER_CPU_FREQ_MIN com.tencent.tmgp.sgamece 2 1495000
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.sgamece 1 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.sgamece 0 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.tmgp.sgamece 0 2
+CMD_SET_CPU_FREQ_MAX com.tencent.tmgp.sgamece 481000
+CMD_SET_CPU_FREQ_MIN com.tencent.tmgp.sgamece 481000
+CMD_SET_VCORE com.tencent.tmgp.cf 2
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.cf 2 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.tmgp.cf 2 2
+CMD_SET_CLUSTER_CPU_FREQ_MAX com.tencent.tmgp.cf 2 1495000
+CMD_SET_CLUSTER_CPU_FREQ_MIN com.tencent.tmgp.cf 2 1495000
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.cf 1 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.tmgp.cf 0 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.tmgp.cf 0 2
+CMD_SET_CPU_FREQ_MAX com.tencent.tmgp.cf 481000
+CMD_SET_CPU_FREQ_MIN com.tencent.tmgp.cf 481000
+CMD_SET_VCORE com.tencent.pao 2
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.pao 2 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.pao 2 2
+CMD_SET_CLUSTER_CPU_FREQ_MAX com.tencent.pao 2 1495000
+CMD_SET_CLUSTER_CPU_FREQ_MIN com.tencent.pao 2 1495000
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.pao 1 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.pao 0 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.pao 0 2
+CMD_SET_CPU_FREQ_MAX com.tencent.pao 481000
+CMD_SET_CPU_FREQ_MIN com.tencent.pao 481000
+CMD_SET_VCORE com.miHoYo.bh3.uc 2
+CMD_SET_CLUSTER_CPU_CORE_MAX com.miHoYo.bh3.uc 2 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.miHoYo.bh3.uc 2 2
+CMD_SET_CLUSTER_CPU_FREQ_MAX com.miHoYo.bh3.uc 2 1495000
+CMD_SET_CLUSTER_CPU_FREQ_MIN com.miHoYo.bh3.uc 2 1495000
+CMD_SET_CLUSTER_CPU_CORE_MAX com.miHoYo.bh3.uc 1 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.miHoYo.bh3.uc 0 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.miHoYo.bh3.uc 0 2
+CMD_SET_CPU_FREQ_MAX com.miHoYo.bh3.uc 481000
+CMD_SET_CPU_FREQ_MIN com.miHoYo.bh3.uc 481000
+CMD_SET_VCORE com.ztgame.bob 2
+CMD_SET_CLUSTER_CPU_CORE_MAX com.ztgame.bob 2 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.ztgame.bob 2 2
+CMD_SET_CLUSTER_CPU_FREQ_MAX com.ztgame.bob 2 1495000
+CMD_SET_CLUSTER_CPU_FREQ_MIN com.ztgame.bob 2 1495000
+CMD_SET_CLUSTER_CPU_CORE_MAX com.ztgame.bob 1 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.ztgame.bob 0 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.ztgame.bob 0 2
+CMD_SET_CPU_FREQ_MAX com.ztgame.bob 481000
+CMD_SET_CPU_FREQ_MIN com.ztgame.bob 481000
+CMD_SET_VCORE com.tencent.WeFire 2
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.WeFire 2 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.WeFire 2 2
+CMD_SET_CLUSTER_CPU_FREQ_MAX com.tencent.WeFire 2 1495000
+CMD_SET_CLUSTER_CPU_FREQ_MIN com.tencent.WeFire 2 1495000
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.WeFire 1 0
+CMD_SET_CLUSTER_CPU_CORE_MAX com.tencent.WeFire 0 2
+CMD_SET_CLUSTER_CPU_CORE_MIN com.tencent.WeFire 0 2
+CMD_SET_CPU_FREQ_MAX com.tencent.WeFire 481000
+CMD_SET_CPU_FREQ_MIN com.tencent.WeFire 481000
+#1175680614

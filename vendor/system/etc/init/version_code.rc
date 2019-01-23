@@ -1,0 +1,8 @@
+#for version_code read
+service versioncode /system/bin/versioncode
+    user root
+    oneshot
+    disabled
+    on property:service.nvram_init=Ready
+    start versioncode
+# zhouming,2016-2-19,add end 

@@ -1,0 +1,40 @@
+#!/system/bin/sh
+#########################################################################
+#	TpTest     							    																				#
+#	adb push TpTest /data/data   					    							  					#
+#	[FAQ04270]                 																						#
+#########################################################################
+
+
+
+
+case $1 in
+	"0")
+		#echo "Tp Status:0(On)"
+		sh /system/bin/am force-stop com.hq.tptest
+		sh /system/bin/am start -S -n com.hq.tptest/com.hq.tptest.TestTouchPanelLine2
+		
+		echo "1"
+	;;
+
+	"1")
+		#echo "Tp Status:1(off)"
+		sh /system/bin/input keyevent 4
+		echo "1"
+	;;
+	"2")
+		#echo "Tp Status:1(off)"
+		read number </storage/sdcard0/TpTestResult.txt
+		echo $number
+	;;
+	"3")
+		#echo "Tp Status:1(off)"
+		rm -rf /storage/sdcard0/TpTestResult.txt
+		echo "1"
+	;;
+	*)
+		echo "Invalid argument!!(par1 : commandID = $1)"
+	;;
+esac
+
+exit 0

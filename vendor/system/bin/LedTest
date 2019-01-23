@@ -1,0 +1,95 @@
+#!/system/bin/sh
+#########################################################################
+#	LedTest     							    																				#
+#	adb push LedTest /data/data   					    							  					#
+#	[FAQ04270]                 																						#
+#########################################################################
+
+#lcd backlight
+#echo 102 > /sys/devices/platform/leds-mt65xx/leds/lcd-backlight/brightness
+
+#button backlight
+#echo 255 > /sys/devices/platform/leds-mt65xx/leds/button-backlight/brightness
+
+
+case $1 in
+	"0")
+		#echo "LED Status:0(Off)"
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+
+	"1")
+		#echo "LED Status:1(Red Light)"
+		echo 255 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+
+	"2")
+		#echo "LED Status:2(Green Light)"
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		echo 255 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+
+	"3")
+		#echo "LED Status:3(White Light)"
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		echo 0 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		echo 255 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+	"4")
+		#echo "LED Status:3(White Light)"
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		echo 255 > sys/class/leds/lcd-backlight/brightness
+		#echo 255 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+	"5")
+		#echo "LED Status:3(White Light)"
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		echo 127 > sys/class/leds/lcd-backlight/brightness
+		#echo 255 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+	"6")
+		#echo "LED Status:3(White Light)"
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		echo 0 > sys/class/leds/lcd-backlight/brightness
+		#echo 255 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+	"7")
+		#echo "LED Status:3(White Light)"
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		#echo 0 > sys/class/leds/lcd-backlight/brightness
+		echo 0 > /sys/class/leds/button-backlight/brightness
+		#echo 255 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+	"8")
+		#echo "LED Status:3(White Light)"
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/red/brightness
+		#echo 0 > /sys/devices/platform/leds-mt65xx/leds/green/brightness
+		#echo 0 > sys/class/leds/lcd-backlight/brightness
+		echo 255 > /sys/class/leds/button-backlight/brightness
+		#echo 255 > /sys/devices/platform/leds-mt65xx/leds/blue/brightness
+		echo "1"
+	;;
+
+	*)
+		echo "Invalid argument!!(par1 : commandID = $1)"
+	;;
+esac
+
+exit 0

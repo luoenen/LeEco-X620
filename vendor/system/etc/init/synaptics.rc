@@ -1,0 +1,8 @@
+service synapticstpcali /system/bin/synaptics_tp_cali
+    user root
+    disabled
+    oneshot
+on property:debug.synaptics.cali.action=put_tp_cali_flag
+    start synapticstpcali
+on property:debug.synaptics.cali.action=get_tp_cali_flag
+    start synapticstpcali
